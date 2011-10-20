@@ -27,10 +27,39 @@ class EpGuides
     return matches[1]
   end
 
+  def self.download(epguides_id)
+    open(get_file_name(epguides_id), 'wb') do |file|
+      file << open("http://epguides.com/#{epguides_id}").read
+    end
+  end
+
+  def self.get_episodes(epguides_id)
+    episodes = []
+
+    url = "http://epguides.com/#{epguides_id}"
+
+    doc = Nokogiri::HTML(open(url, 'r'))
+    anchors = doc.css('#eplist pre a')
+    anchors.each do |a|
+      title = a.attribute('title')
+      next if title == nil
+      matches = /season +([0-9]+) +episode +([0-9]+)/.match(title)
+      next if matches == nil
+      episode = Episode.new 
+      episode.season = matches[1].to_i
+      episode.number = matches[2].to_i
+      episode.title = a.text
+      date_matches = %r{[0-9]+/[A-Za-z]+/[0-9]+}.match(a.previous.text)
+      episode.date = Date.parse(date_matches[0], comp=true)
+      episodes.push(episode)
+    end
+    return episodes
+  end
+
+
 end
 
 class ShowResult
   attr_accessor :title, :url, :cache_url, :epguides_id
 end
 
-results = EpGuides::search('Hawaii Five-O')

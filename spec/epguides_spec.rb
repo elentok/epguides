@@ -31,3 +31,19 @@ describe "EpGuides::find_epguides_id" do
     id.should == 'HawaiiFiveO'
   end
 end
+
+describe 'EpGuides::get_episodes()' do
+
+  it "should return episodes" do
+    episodes = EpGuides::get_episodes("BurnNotice")
+    episodes.length.should be 77
+  end
+
+  it "should return episode #1 = '1x1 - Pilot'" do
+    episodes = EpGuides::get_episodes("BurnNotice")
+    episodes.first.season.should be 1
+    episodes.first.number.should be 1
+    episodes.first.title.should == 'Pilot'
+  end
+
+end
