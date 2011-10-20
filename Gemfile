@@ -15,5 +15,5 @@ end
 gem 'rdoc'
 gem 'googleajax'
 
-# on ubuntu: requires libxml2-dev
+# on ubuntu: requires libxml2-dev and libxslt-dev
 gem 'nokogiri'

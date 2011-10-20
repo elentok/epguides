@@ -35,11 +35,21 @@ end
 describe 'EpGuides::get_episodes()' do
 
   it "should return episodes" do
+    EpGuides.class_eval do
+      def self.download(url)
+        open('spec/BurnNotice.html')
+      end
+    end
     episodes = EpGuides::get_episodes("BurnNotice")
-    episodes.length.should be 77
+    episodes.length.should be 80
   end
 
   it "should return episode #1 = '1x1 - Pilot'" do
+    EpGuides.class_eval do
+      def self.download(url)
+        open('spec/BurnNotice.html')
+      end
+    end
     episodes = EpGuides::get_episodes("BurnNotice")
     episodes.first.season.should be 1
     episodes.first.number.should be 1

@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'googleajax'
 require 'yaml'
+require 'open-uri'
+require 'nokogiri'
 
 GoogleAjax.referrer = 'elentok.com'
 
@@ -28,17 +30,14 @@ class EpGuides
   end
 
   def self.download(epguides_id)
-    open(get_file_name(epguides_id), 'wb') do |file|
-      file << open("http://epguides.com/#{epguides_id}").read
-    end
+    url = "http://epguides.com/#{epguides_id}"
+    open(url)
   end
 
   def self.get_episodes(epguides_id)
     episodes = []
 
-    url = "http://epguides.com/#{epguides_id}"
-
-    doc = Nokogiri::HTML(open(url, 'r'))
+    doc = Nokogiri::HTML(download(epguides_id))
     anchors = doc.css('#eplist pre a')
     anchors.each do |a|
       title = a.attribute('title')
@@ -63,3 +62,6 @@ class ShowResult
   attr_accessor :title, :url, :cache_url, :epguides_id
 end
 
+class Episode
+  attr_accessor :season, :number, :title, :date
+end
