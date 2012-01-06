@@ -4,6 +4,8 @@ require 'yaml'
 require 'open-uri'
 require 'nokogiri'
 
+require_relative 'models/episode'
+
 GoogleAjax.referrer = 'elentok.com'
 
 class EpGuides
@@ -62,6 +64,3 @@ class ShowResult
   attr_accessor :title, :url, :cache_url, :epguides_id
 end
 
-class Episode
-  attr_accessor :season, :number, :title, :date
-end
